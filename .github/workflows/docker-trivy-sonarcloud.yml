@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+        - 'my-fast-api/**'      # Adicione o caminho para os arquivos de Helm Charts
+        - '.github/workflows/**'  # Adicione o caminho para os arquivos de workflow, se necessário
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:

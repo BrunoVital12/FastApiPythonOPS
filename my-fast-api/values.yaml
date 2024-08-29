@@ -1,71 +1,19 @@
-replicaCount: 1
-
+## Valores de configuração que serão usados pelo Helm para criar os manifests do Kubernetes.
 image:
   repository: docker.io/brunovital12/my-fastapi-app
-  pullPolicy: IfNotPresent
-  tag: "latest"
+  tag: latest
 
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
-serviceAccount:
-  create: true
-  automount: true
-  annotations: {}
-  name: ""
-
-podAnnotations: {}
-podLabels: {}
-
-podSecurityContext: {}
-securityContext: {}
+replicaCount: 2
 
 service:
-  type: NodePort
-  port: 80               # Porta que o serviço expõe
-  targetPort: 8000       # Porta que o contêiner está ouvindo
-  protocol: TCP
-  nodePort: 30081        # Porta do NodePort para acesso externo
-
+  type: ClusterIP
+  port: 8000
 
 ingress:
   enabled: true
-  className: ""
-  annotations: {}
+  annotations: 
+    nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
     - host: chart-example.local
       paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-
-resources: {}
-
-livenessProbe:
-  httpGet:
-    path: /
-    port: 8000
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  timeoutSeconds: 5
-
-readinessProbe:
-  httpGet:
-    path: /
-    port: 8000
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  timeoutSeconds: 5
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-
-volumes: []
-volumeMounts: []
-nodeSelector: {}
-tolerations: []
-affinity: {}
+        - /

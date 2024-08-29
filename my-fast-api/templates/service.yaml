@@ -3,18 +3,11 @@ kind: Service
 metadata:
   name: my-fast-api
   labels:
-    app: my-fast-api
+    app: {{ .Release.Name }}
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
-    - port: 80               # Porta que o serviço expõe
-      targetPort: 8000       # Porta que o contêiner está ouvindo
-      protocol: TCP
-      name: http             # Nome da porta deve ser único
-      nodePort: 30081        # Porta do NodePort para acesso externo
-    - port: 443              # Porta para HTTPS (opcional, se estiver usando HTTPS)
-      targetPort: 8000       # Porta que o contêiner está ouvindo
-      protocol: TCP
-      name: https            # Nome da porta deve ser único
+    - port: 80
+      targetPort: 8000
   selector:
-    app: my-fast-api
+    app: {{ .Release.Name }}

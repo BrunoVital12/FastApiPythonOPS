@@ -6,7 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: https://6539-191-34-125-222.ngrok-free.app
+  - host: 6539-191-34-125-222.ngrok-free.app
     http:
       paths:
       - path: /

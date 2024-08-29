@@ -1,4 +1,4 @@
-## Valores de configuração que serão usados pelo Helm para criar os manifests do Kubernetes.
+
 image:
   repository: docker.io/brunovital12/my-fastapi-app
   tag: latest
@@ -6,14 +6,15 @@ image:
 replicaCount: 2
 
 service:
-  type: ClusterIP
+  type: NodePort  # Mudei para NodePort
   port: 8000
+  nodePort: 30085  # Você pode definir um NodePort específico, ou deixar que o Kubernetes escolha um.
 
 ingress:
   enabled: true
   annotations: 
     nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
-    - host: chart-example.local
+    - host: https://6539-191-34-125-222.ngrok-free.app
       paths:
         - /

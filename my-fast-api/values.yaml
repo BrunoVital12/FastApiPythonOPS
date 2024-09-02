@@ -3,17 +3,7 @@ image:
   repository: docker.io/brunovital12/my-fastapi-app
   tag: latest
 
-replicaCount: 2
+  type: NodePort  # Define o tipo de serviço como NodePort
+  port: 8000      # Porta interna do container
+  nodePort: 31002 # Porta externa do cluster (opcional, se você quiser uma porta específica)
 
-service:
-  type: ClusterIP
-  port: 8000
-
-ingress:
-  enabled: true
-  annotations: 
-    nginx.ingress.kubernetes.io/rewrite-target: /
-  hosts:
-    - host: chart-example.local
-      paths:
-        - /

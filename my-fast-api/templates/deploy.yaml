@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: {{ .Release.Name }}
@@ -19,6 +19,3 @@ spec:
         image: docker.io/brunovital12/my-fastapi-app:latest
         ports:
         - containerPort: 8000
-        env:
-        - name: ENVIRONMENT
-          value: "production"

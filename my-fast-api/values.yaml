@@ -1,9 +1,42 @@
-## Valores de configuração que serão usados pelo Helm para criar os manifests do Kubernetes.
 image:
   repository: docker.io/brunovital12/my-fastapi-app
   tag: latest
+  type: NodePort
+  port: 8000
+  nodePort: 31002
 
-  type: NodePort  # Define o tipo de serviço como NodePort
-  port: 8000      # Porta interna do container
-  nodePort: 31002 # Porta externa do cluster (opcional, se você quiser uma porta específica)
+jaeger:
+  collector:
+    enabled: true
+    replicaCount: 1
 
+  agent:
+    enabled: true
+    replicaCount: 1
+
+  query:
+    enabled: true
+    replicaCount: 1
+
+  storage:
+    type: memory  # Configure o armazenamento para memória
+    # Remova a configuração de Cassandra para evitar conflitos
+    cassandra:
+      enabled: false
+
+  service:
+    type: ClusterIP
+    port: 14250
+    targetPort: 14250
+
+  agentService:
+    type: ClusterIP
+    port: 5775
+
+  resources:
+    limits:
+      memory: "4Gi"
+      cpu: "2"
+    requests:
+      memory: "4Gi"
+      cpu: "2"

@@ -5,38 +5,33 @@ image:
   port: 8000
   nodePort: 31002
 
-jaeger:
-  collector:
-    enabled: true
-    replicaCount: 1
+provisionDataStore:
+  cassandra: false
+allInOne:
+  enabled: true
+storage:
+  type: memory
+agent:
+  enabled: false
+collector:
+  enabled: false
+query:
+  enabled: false
 
-  agent:
-    enabled: true
-    replicaCount: 1
-
-  query:
-    enabled: true
-    replicaCount: 1
-
-  storage:
-    type: memory  # Configure o armazenamento para memória
-    # Remova a configuração de Cassandra para evitar conflitos
-    cassandra:
-      enabled: false
-
-  service:
-    type: ClusterIP
-    port: 14250
-    targetPort: 14250
-
-  agentService:
-    type: ClusterIP
-    port: 5775
-
-  resources:
+  allInOne:
+   extraEnv:
+    - name: QUERY_BASE_PATH
+      value: /jaeger
+   resources:
     limits:
-      memory: "4Gi"
-      cpu: "2"
+      cpu: 500m
+      memory: 512Mi
     requests:
-      memory: "4Gi"
-      cpu: "2"
+      cpu: 256m
+      memory: 128Mi
+   extraSecretMounts:
+    - name: jaeger-tls
+      mountPath: /tls
+      subPath: ""
+      secretName: jaeger-tls
+      readOnly: true

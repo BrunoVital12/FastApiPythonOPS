@@ -3,5 +3,5 @@ image:
   tag: latest
   type: NodePort
   port: 8000
-  nodePort: 31002
+  nodePort: 31003
 

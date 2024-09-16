@@ -3,4 +3,39 @@ image:
   tag: latest
   type: NodePort
   port: 8000
-  nodePort: 31004
+  nodePort: 31001
+  ingress:
+  enabled: false  # Controle a criação do recurso Ingress
+  
+ingress:
+  enabled: true
+  className: nginx
+  host: myfastapi.com
+
+ingressClass:
+  enabled: false  # Se o IngressClass já existe, mantenha como false
+  name: nginx
+  controller: nginx.org/ingress-controller
+
+service:
+  port: 8000
+
+app:
+  name: meu-app
+
+monitoring:
+  namespace: observability
+
+serviceMonitor:
+  enabled: true
+  metricsPort: http-metrics
+  metricsPath: /metrics
+  scrapeInterval: 30s
+  monitorAllNamespaces: true
+
+podMonitor:
+  enabled: true
+  metricsPort: http-metrics
+  metricsPath: /metrics
+  scrapeInterval: 30s
+  monitorAllNamespaces: true

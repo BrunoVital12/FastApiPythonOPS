@@ -1,37 +1,52 @@
+{{- if .Values.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: meu-servicemonitor
+  name: {{ .Release.Name }}-servicemonitor
+  namespace: {{ .Values.monitoring.namespace }}
   labels:
-    release: prometheus
-    app: meu-app
-  namespace: observability
+    release: {{ .Release.Name }}
+    app: {{ .Values.app.name }}
 spec:
   selector:
     matchLabels:
-      app: meu-app
+      app: {{ .Values.app.name }}
   endpoints:
-  - port: http-metrics
-    path: /metrics
-    interval: 30s
+    - port: {{ .Values.serviceMonitor.metricsPort }}
+      path: {{ .Values.serviceMonitor.metricsPath }}
+      interval: {{ .Values.serviceMonitor.scrapeInterval }}
   namespaceSelector:
-    any: true  # Monitorar todos os namespaces
+    {{- if .Values.serviceMonitor.monitorAllNamespaces }}
+    any: true
+    {{- else }}
+    matchNames:
+      - {{ .Values.monitoring.namespace }}
+    {{- end }}
+{{- end }}
+
+{{- if .Values.podMonitor.enabled }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: meu-podmonitor
+  name: {{ .Release.Name }}-podmonitor
+  namespace: {{ .Values.monitoring.namespace }}
   labels:
-    release: prometheus
-    app: meu-app
-  namespace: observability
+    release: {{ .Release.Name }}
+    app: {{ .Values.app.name }}
 spec:
   selector:
     matchLabels:
-      app: meu-app
+      app: {{ .Values.app.name }}
   podMetricsEndpoints:
-  - port: http-metrics
-    path: /metrics
-    interval: 30s
+    - port: {{ .Values.podMonitor.metricsPort }}
+      path: {{ .Values.podMonitor.metricsPath }}
+      interval: {{ .Values.podMonitor.scrapeInterval }}
   namespaceSelector:
-    any: true  # Monitorar todos os namespaces
+    {{- if .Values.podMonitor.monitorAllNamespaces }}
+    any: true
+    {{- else }}
+    matchNames:
+      - {{ .Values.monitoring.namespace }}
+    {{- end }}
+{{- end }}
